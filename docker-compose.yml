@@ -71,6 +71,10 @@ services:
       - ./tls/certs/ca/ca.crt:/usr/share/elasticsearch/config/ca.crt:ro,z
       - ./tls/certs/elasticsearch/elasticsearch.crt:/usr/share/elasticsearch/config/elasticsearch.crt:ro,z
       - ./tls/certs/elasticsearch/elasticsearch.key:/usr/share/elasticsearch/config/elasticsearch.key:ro,z
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
     ports:
       - 9200:9200
       - 9300:9300
@@ -126,7 +130,7 @@ services:
     deploy:
       resources:
         limits:
-          cpu: '0.5'
+          cpus: '0.5'
     ports:
       - 5601:5601
     environment:
