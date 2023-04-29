@@ -12,6 +12,10 @@ services:
       - ./tls/certs/ca/ca.crt:/usr/share/elastic-agent/ca.crt:ro,z
       - ./tls/certs/fleet-server/fleet-server.crt:/usr/share/elastic-agent/fleet-server.crt:ro,Z
       - ./tls/certs/fleet-server/fleet-server.key:/usr/share/elastic-agent/fleet-server.key:ro,Z
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
     environment:
       FLEET_SERVER_ENABLE: '1'
       FLEET_SERVER_HOST: 0.0.0.0
