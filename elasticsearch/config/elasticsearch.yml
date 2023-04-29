@@ -4,6 +4,8 @@
 #
 cluster.name: docker-cluster
 network.host: 0.0.0.0
+network.bind_host: 0.0.0.0
+network.publish_host: 167.71.192.148
 
 ## X-Pack settings
 ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html
