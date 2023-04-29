@@ -1,12 +1,11 @@
 # Elastic stack (ELK) on Docker
 
-<<<<<<< HEAD
-[![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.6.2-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
-[![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=tls)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Atls)
-=======
 [![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.7.0-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
 [![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Amain)
->>>>>>> 29bf24553c41d112049225efa55f782c229f4343
+
+[![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.7.0-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
+[![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Amain)
+>>>>>>> main
 [![Join the chat](https://badges.gitter.im/Join%20Chat.svg)](https://app.gitter.im/#/room/#deviantony_docker-elk:gitter.im)
 
 Run the latest version of the [Elastic stack][elk-stack] with Docker and Docker Compose.
@@ -16,7 +15,7 @@ the visualization power of Kibana.
 
 ![Animated demo](https://user-images.githubusercontent.com/3299086/155972072-0c89d6db-707a-47a1-818b-5f976565f95a.gif)
 
-> **Note**  
+> **Note**
 > [Platinum][subscriptions] features are enabled by default for a [trial][license-mngmt] duration of **30 days**. After
 > this evaluation period, you will retain access to all the free features included in the Open Basic license seamlessly,
 > without manual intervention required, and without losing any data. Refer to the [How to disable paid
@@ -50,35 +49,38 @@ own_. [sherifabdlnaby/elastdocker][elastdocker] is one example among others of p
 
 ## Contents
 
-1. [Requirements](#requirements)
-   * [Host setup](#host-setup)
-   * [Docker Desktop](#docker-desktop)
-     * [Windows](#windows)
-     * [macOS](#macos)
-1. [Usage](#usage)
-   * [Bringing up the stack](#bringing-up-the-stack)
-   * [Initial setup](#initial-setup)
-     * [Setting up user authentication](#setting-up-user-authentication)
-     * [Injecting data](#injecting-data)
-   * [Cleanup](#cleanup)
-   * [Version selection](#version-selection)
-1. [Configuration](#configuration)
-   * [How to configure Elasticsearch](#how-to-configure-elasticsearch)
-   * [How to configure Kibana](#how-to-configure-kibana)
-   * [How to configure Logstash](#how-to-configure-logstash)
-   * [How to disable paid features](#how-to-disable-paid-features)
-   * [How to scale out the Elasticsearch cluster](#how-to-scale-out-the-elasticsearch-cluster)
-   * [How to re-generate TLS certificates](#how-to-re-generate-tls-certificates)
-   * [How to re-execute the setup](#how-to-re-execute-the-setup)
-   * [How to reset a password programmatically](#how-to-reset-a-password-programmatically)
-1. [Extensibility](#extensibility)
-   * [How to add plugins](#how-to-add-plugins)
-   * [How to enable the provided extensions](#how-to-enable-the-provided-extensions)
-1. [JVM tuning](#jvm-tuning)
-   * [How to specify the amount of memory used by a service](#how-to-specify-the-amount-of-memory-used-by-a-service)
-   * [How to enable a remote JMX connection to a service](#how-to-enable-a-remote-jmx-connection-to-a-service)
-1. [Going further](#going-further)
-   * [Plugins and integrations](#plugins-and-integrations)
+- [Elastic stack (ELK) on Docker](#elastic-stack-elk-on-docker)
+  - [Philosophy](#philosophy)
+  - [Contents](#contents)
+  - [Requirements](#requirements)
+    - [Host setup](#host-setup)
+    - [Docker Desktop](#docker-desktop)
+      - [Windows](#windows)
+      - [macOS](#macos)
+  - [Usage](#usage)
+    - [Bringing up the stack](#bringing-up-the-stack)
+    - [Initial setup](#initial-setup)
+      - [Setting up user authentication](#setting-up-user-authentication)
+      - [Injecting data](#injecting-data)
+    - [Cleanup](#cleanup)
+    - [Version selection](#version-selection)
+  - [Configuration](#configuration)
+    - [How to configure Elasticsearch](#how-to-configure-elasticsearch)
+    - [How to configure Kibana](#how-to-configure-kibana)
+    - [How to configure Logstash](#how-to-configure-logstash)
+    - [How to disable paid features](#how-to-disable-paid-features)
+    - [How to scale out the Elasticsearch cluster](#how-to-scale-out-the-elasticsearch-cluster)
+    - [How to re-generate TLS certificates](#how-to-re-generate-tls-certificates)
+    - [How to re-execute the setup](#how-to-re-execute-the-setup)
+    - [How to reset a password programmatically](#how-to-reset-a-password-programmatically)
+  - [Extensibility](#extensibility)
+    - [How to add plugins](#how-to-add-plugins)
+    - [How to enable the provided extensions](#how-to-enable-the-provided-extensions)
+  - [JVM tuning](#jvm-tuning)
+    - [How to specify the amount of memory used by a service](#how-to-specify-the-amount-of-memory-used-by-a-service)
+    - [How to enable a remote JMX connection to a service](#how-to-enable-a-remote-jmx-connection-to-a-service)
+  - [Going further](#going-further)
+    - [Plugins and integrations](#plugins-and-integrations)
 
 ## Requirements
 
@@ -88,12 +90,12 @@ own_. [sherifabdlnaby/elastdocker][elastdocker] is one example among others of p
 * [Docker Compose][compose-install] version **1.26.0** or newer (including [Compose V2][compose-v2])
 * 1.5 GB of RAM
 
-> **Warning**  
+> **Warning**
 > While Compose versions between **1.22.0** and **1.25.5** can technically run this stack as well, these versions have a
 > [known issue](https://github.com/deviantony/docker-elk/pull/678#issuecomment-1055555368) which prevents them from
 > parsing quoted values properly inside `.env` files.
 
-> **Note**  
+> **Note**
 > Especially on Linux, make sure your user has the [required permissions][linux-postinstall] to interact with the Docker
 > daemon.
 
@@ -106,7 +108,7 @@ By default, the stack exposes the following ports:
 * 9300: Elasticsearch TCP transport
 * 5601: Kibana
 
-> **Warning**  
+> **Warning**
 > Elasticsearch's [bootstrap checks][bootstrap-checks] were purposely disabled to facilitate the setup of the Elastic
 > stack in development environments. For production setups, we recommend users to set up their host according to the
 > instructions from the Elasticsearch documentation: [Important System Configuration][es-sys-config].
@@ -126,7 +128,7 @@ instructions from the [documentation][mac-filesharing] to add more locations.
 
 ## Usage
 
-> **Warning**  
+> **Warning**
 > You must rebuild the stack images with `docker-compose build` whenever you switch branch or update the
 > [version](#version-selection) of an already existing stack.
 
@@ -144,7 +146,7 @@ Then, generate X.509 certificates and private keys to enable secure communicatio
 docker-compose up tls
 ```
 
-> **Note**  
+> **Note**
 > All Elastic components — including [extensions](#how-to-enable-the-provided-extensions) — are pre-configured to use
 > the certificates generated by this command. To change the DNS names and IP addresses to include in the certificates,
 > or re-generate them at a later time, refer to [How to re-generate TLS
@@ -156,7 +158,7 @@ After TLS certificates have been generated, start the stack components locally w
 docker-compose up
 ```
 
-> **Note**  
+> **Note**
 > You can also run all services in the background (detached mode) by appending the `-d` flag to the above command.
 
 Give Kibana about a minute to initialize, then access the Kibana web UI by opening <http://localhost:5601> in a web
@@ -165,7 +167,7 @@ browser and use the following (default) credentials to log in:
 * user: *elastic*
 * password: *changeme*
 
-> **Note**  
+> **Note**
 > Upon the initial startup, the `elastic`, `logstash_internal` and `kibana_system` Elasticsearch users are intialized
 > with the values of the passwords defined in the [`.env`](.env) file (_"changeme"_ by default). The first one is the
 > [built-in superuser][builtin-users], the other two are used by Kibana and Logstash respectively to communicate with
@@ -176,10 +178,10 @@ browser and use the following (default) credentials to log in:
 
 #### Setting up user authentication
 
-> **Note**  
+> **Note**
 > Refer to [Security settings in Elasticsearch][es-security] to disable authentication.
 
-> **Warning**  
+> **Warning**
 > Starting with Elastic v8.0.0, it is no longer possible to run Kibana using the bootstraped privileged `elastic` user.
 
 The _"changeme"_ password set by default for all aforementioned users is **unsecure**. For increased security, we will
@@ -212,7 +214,7 @@ reset the passwords of all aforementioned Elasticsearch users to random secrets.
     Its value isn't used by any core component, but [extensions](#how-to-enable-the-provided-extensions) use it to
     connect to Elasticsearch.
 
-    > **Note**  
+    > **Note**
     > In case you don't plan on using any of the provided [extensions](#how-to-enable-the-provided-extensions), or
     > prefer to create your own roles and users to authenticate these services, it is safe to remove the
     > `ELASTIC_PASSWORD` entry from the `.env` file altogether after the stack has been initialized.
@@ -231,7 +233,7 @@ reset the passwords of all aforementioned Elasticsearch users to random secrets.
     docker-compose up -d logstash kibana
     ```
 
-> **Note**  
+> **Note**
 > Learn more about the security of the Elastic stack at [Secure the Elastic Stack][sec-cluster].
 
 #### Injecting data
@@ -277,7 +279,7 @@ To use a different version of the core Elastic components, simply change the ver
 file. If you are upgrading an existing stack, remember to rebuild all container images using the `docker-compose build`
 command.
 
-> **Warning**  
+> **Warning**
 > Always pay attention to the [official upgrade instructions][upgrade] for each individual component before performing a
 > stack upgrade.
 
@@ -289,7 +291,7 @@ Older major versions are also supported on separate branches:
 
 ## Configuration
 
-> **Note**  
+> **Note**
 > Configuration is not dynamically reloaded, you will need to restart individual components after any configuration
 > change.
 
