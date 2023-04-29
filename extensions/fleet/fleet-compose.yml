@@ -8,6 +8,10 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
       - fleet-server:/usr/share/elastic-agent/state:Z
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
     environment:
       FLEET_SERVER_ENABLE: '1'
       FLEET_SERVER_INSECURE_HTTP: '1'
