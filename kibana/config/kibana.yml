@@ -6,10 +6,6 @@ server.name: kibana
 server.host: 0.0.0.0
 elasticsearch.hosts: [ http://elasticsearch:9200 ]
 
-environment:
-    network.host: _non_loopback_
-    cluster.name: inloob-log
-
 monitoring.ui.container.elasticsearch.enabled: true
 monitoring.ui.container.logstash.enabled: true
 
