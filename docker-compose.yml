@@ -73,6 +73,10 @@ services:
       context: elasticsearch/
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
       - elasticsearch:/usr/share/elasticsearch/data:Z
@@ -126,6 +130,10 @@ services:
       context: kibana/
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
       # (!) TLS certificates. Generate using the 'tls' service.

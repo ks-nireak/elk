@@ -6,6 +6,10 @@ services:
       context: extensions/fleet/
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
     volumes:
       - fleet-server:/usr/share/elastic-agent/state:Z
       # (!) TLS certificates. Generate using the 'tls' service.

@@ -10,6 +10,7 @@ network.host: 0.0.0.0
 #
 xpack.license.self_generated.type: baisc
 xpack.security.enabled: true
+xpack.security.authc.api_key.enabled: true
 
 ##
 ## TLS configuration
