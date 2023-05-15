@@ -19,7 +19,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '0.7'
     volumes:
       - apm-server:/usr/share/elastic-agent/state:Z
       # (!) TLS certificates. Generate using the 'tls' service.
@@ -34,10 +34,10 @@ services:
       ELASTICSEARCH_CA: /usr/share/elastic-agent/ca.crt
       # Enrollment.
       # (a) Auto-enroll using basic authentication
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # ELASTICSEARCH_USERNAME: elastic
+      # ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
       # (b) Enroll using a pre-generated enrollment token
-      #FLEET_ENROLLMENT_TOKEN: <enrollment_token>
+      FLEET_ENROLLMENT_TOKEN: ${APM_ENROLLMENT_TOKEN}
     ports:
       - 8200:8200
     hostname: apm-server

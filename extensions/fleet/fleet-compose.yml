@@ -9,7 +9,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '0.7'
     volumes:
       - fleet-server:/usr/share/elastic-agent/state:Z
       # (!) TLS certificates. Generate using the 'tls' service.
@@ -29,10 +29,10 @@ services:
       KIBANA_FLEET_SETUP: '1'
       # Enrollment.
       # (a) Auto-enroll using basic authentication
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # ELASTICSEARCH_USERNAME: elastic
+      # ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
       # (b) Enroll using a pre-generated service token
-      #FLEET_SERVER_SERVICE_TOKEN: <service_token>
+      FLEET_SERVER_SERVICE_TOKEN: ${FLEET_ENROLLMENT_TOKEN}
     ports:
       - 8220:8220
     hostname: fleet-server
