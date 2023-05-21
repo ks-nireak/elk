@@ -100,6 +100,8 @@ services:
       - elk
     restart: unless-stopped
 
+  
+
   # logstash:
   #   build:
   #     context: logstash/
@@ -149,9 +151,77 @@ services:
       - elasticsearch
     restart: unless-stopped
 
+  apm-server:
+    build:
+      context: extensions/fleet/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+    volumes:
+      - apm-server:/usr/share/elastic-agent/state:Z
+      # (!) TLS certificates. Generate using the 'tls' service.
+      - ./tls/certs/ca/ca.crt:/usr/share/elastic-agent/ca.crt:ro,z
+      - ./tls/certs/apm-server/apm-server.crt:/usr/share/elastic-agent/apm-server.crt:ro,Z
+      - ./tls/certs/apm-server/apm-server.key:/usr/share/elastic-agent/apm-server.key:ro,Z
+    environment:
+      FLEET_ENROLL: '1'
+      FLEET_TOKEN_POLICY_NAME: Agent Policy APM Server
+      FLEET_URL: https://fleet-server:8220
+      ELASTICSEARCH_HOST: https://elasticsearch:9200
+      ELASTICSEARCH_CA: /usr/share/elastic-agent/ca.crt
+      # Enrollment.
+      # (a) Auto-enroll using basic authentication
+      # ELASTICSEARCH_USERNAME: elastic
+      # ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # (b) Enroll using a pre-generated enrollment token
+      FLEET_ENROLLMENT_TOKEN: ${APM_ENROLLMENT_TOKEN}
+    ports:
+      - 8200:8200
+    hostname: apm-server
+    # Elastic Agent does not retry failed connections to Kibana upon the initial enrollment phase.
+    restart: on-failure
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - kibana
+      - fleet-server
+
+  fleet-server:
+    image: docker.elastic.co/fleet-server/fleet-server:${ELASTIC_VERSION}
+    container_name: fleet-server
+    environment:
+      - FLEET_SERVER_ENABLE_TLS=true
+      - FLEET_SERVER_CERT=/usr/share/fleet-server/certs/fleet-server.crt
+      - FLEET_SERVER_CERT_KEY=/usr/share/fleet-server/certs/fleet-server.key
+      - FLEET_SERVER_CA_CERT=/usr/share/fleet-server/certs/ca.crt
+      - FLEET_SERVER_ELASTICSEARCH_HOST=https://elasticsearch:9200
+      - FLEET_SERVER_ELASTICSEARCH_USERNAME=elastic
+      - FLEET_SERVER_ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - FLEET_SERVER_KIBANA_HOST=https://kibana:5601
+      - FLEET_SERVER_KIBANA_CA_CERT=/usr/share/fleet-server/certs/ca.crt
+      - FLEET_SERVER_KIBANA_CLIENT_CERT=/usr/share/fleet-server/certs/fleet-server.crt
+      - FLEET_SERVER_KIBANA_CLIENT_KEY=/usr/share/fleet-server/certs/fleet-server.key
+      - FLEET_SERVER_TRUSTED_CA=/usr/share/fleet-server/certs/ca.crt
+    volumes:
+      - fleet-server:/usr/share/fleet-server/data
+      - ./tls/certs/fleet-server:/usr/share/fleet-server/certs:ro,z
+    ports:
+      - 8220:8220
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - kibana
+
 networks:
   elk:
     driver: bridge
 
 volumes:
   elasticsearch:
+  apm-server:
+  fleet-server:
