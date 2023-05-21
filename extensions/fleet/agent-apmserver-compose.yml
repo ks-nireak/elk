@@ -12,6 +12,10 @@ version: '3.7'
 
 services:
   apm-server:
+    deploy:
+      resources:
+          limits:
+            cpus: "0.7"
     build:
       context: extensions/fleet/
       args:
