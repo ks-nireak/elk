@@ -68,6 +68,10 @@ services:
       - elasticsearch
 
   elasticsearch:
+    deploy:
+      resources:
+          limits:
+            cpus: "0.7"
     build:
       context: elasticsearch/
       args:
@@ -121,6 +125,10 @@ services:
   #   restart: unless-stopped
 
   kibana:
+    deploy:
+      resources:
+          limits:
+            cpus: "0.7"
     build:
       context: kibana/
       args:
