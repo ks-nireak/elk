@@ -1,0 +1,39 @@
+receivers:
+  otlp:
+    protocols:
+      http: 
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+  # prometheus:
+  #   endpoint: 0.0.0.0:9091
+  #   namespace: test-space
+  #   const_labels:
+  #     label1: value1
+  #     'another label': spaced value
+  #   send_timestamps: true
+  #   metric_expiration: 180m
+  #   resource_to_telemetry_conversion:
+  #     enabled: true
+
+
+service:
+  telemetry:
+    metrics:
+      level: detailed
+      address: 0.0.0.0:8888
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, otlp/tempo]
