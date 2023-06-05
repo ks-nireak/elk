@@ -1,6 +1,6 @@
 .env
 /*.env
 
-grafana-data/*
-loki-data/*
-tempo-data/*
+grafana-otel/grafana-data/*
+grafana-otel/loki-data/*
+grafana-otel/tempo-data/*
