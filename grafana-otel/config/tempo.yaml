@@ -2,7 +2,7 @@ server:
   http_listen_port: 3200
 
 distributor:
-  receivers: 
+  receivers:
     otlp:
       protocols:
         http:
@@ -13,7 +13,7 @@ ingester:
 
 compactor:
   compaction:
-    block_retention: 1h                # overall Tempo trace retention. set for demo purposes
+    block_retention: 336h # retain data for 14 days
 
 # metrics_generator:
 #   registry:
@@ -28,13 +28,11 @@ compactor:
 
 storage:
   trace:
-    backend: gcs                     # backend configuration to use
-    gcs:
-      bucket_name: stg-inloob-grafana
-      #wal:
-      #path: /tmp/tempo/wal             # where to store the the wal locally
-        #local:
-      #path: /tmp/tempo/blocks
+    backend: local                     # backend configuration to use
+    wal:
+      path: /tmp/tempo/wal             # where to store the the wal locally
+    local:
+      path: /tmp/tempo/blocks
 
 # overrides:
 #   metrics_generator_processors: [service-graphs, span-metrics] # enables metrics generator
