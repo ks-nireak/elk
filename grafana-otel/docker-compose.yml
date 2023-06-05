@@ -10,8 +10,8 @@ services:
     command:
       - --config=/etc/otelcol/otel-config.yaml
     ports:
-      #- 4317:4317     # OTLP over gRPC receiver / not used yet
-      - 4318:4318     # OTLP over HTTP receiver
+      - 4317:4317     # OTLP over gRPC receiver / not used yet
+      #- 4318:4318     # OTLP over HTTP receiver
       #- 9091:9091     # Prometheus exporter / not used yet
       #- 8888:8888     # metrics endpoint / this can be hidden since grafana will connect to it via the network
     volumes:
