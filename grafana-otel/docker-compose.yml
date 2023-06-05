@@ -5,70 +5,64 @@ networks:
 
 services:
   collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector-contrib:latest
     # restart: unless-stopped
     command:
-      - --config=/etc/otel-config.yaml
+      - --config=/etc/otelcol/otel-config.yaml
     ports:
       - 4318:4318     # OTLP over HTTP receiver
       - 9464
       - 9091:9091     # Prometheus exporter
       - 8888:8888     # metrics endpoint
+      - 1888:1888
+      - 55679
     volumes:
-      - ./config/otel-config.yaml:/etc/otel-config.yaml
+      - ./otel-data:/etc/otelcol/
     networks:
       - log-network
 
   grafana:
-    image: grafana/grafana:latest
-    ports:
-      - 3000:3000
-      # - 8888          # metrics endpoint
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GF_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GF_PASSWORD} 
-    # create volume to retain grafana config
+    image: grafana/grafana:9.4.3
+    # user: "1000"
     volumes:
       - ./grafana-data:/var/lib/grafana
-
+    ports:
+      - "3000:3000"
     networks:
       - log-network
 
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   ports:
-  #     - 9090:9090
-  #   volumes:
-  #     - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-
-  # jaeger:
-  #   image: jaegertracing/all-in-one:latest
-  #   ports:
-  #     - 16686:16686
-  #     - 14268:14268
-  #     - 14250:14250
-  #   volumes:
-  #     - ./jaeger-data:/data
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml
+    networks:
+      - log-network
   
-  # loki:
-  #   image: grafana/loki:latest
-  #   ports:
-  #     - 3100:3100
-  #   volumes:
-  #     - ./loki-data:/etc/loki/
-  #   command: 
-  #     - -config.file=/etc/loki/local-config.yaml
+  loki:
+     image: grafana/loki:latest
+     ports:
+       - 3100:3100
+     volumes:
+       - ./config/loki.yaml:/etc/loki/config.yaml
+     command: 
+       - -config.file=/etc/loki/config.yaml
+     networks:
+       - log-network
 
   tempo:
     image: grafana/tempo:latest
     ports:
       - 14268:14268
-      - 3200:3200
+      #- 3200:3200 # this endpoint can be hidden since grafana will connect to it via the network
       - 9411:9411
     volumes:
       - ./tempo-data:/etc/tempo/
+      - ./config/tempo.yaml:/etc/tempo/tempo.yaml
+    # environment:
+    #   - GOOGLE_APPLICATION_CREDENTIALS=/etc/tempo/storage-testing-inloob-4273d5879417.json
     command:
-      - -config.file=/etc/tempo/local-config.yaml
-      # - -grpc-storage-plugin.configuration-file=/etc/tempo/storage-config.yaml
+      - -config.file=/etc/tempo/tempo.yaml
     networks:
       - log-network
