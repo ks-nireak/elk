@@ -2,7 +2,7 @@ server:
   http_listen_port: 3200
 
 distributor:
-  receivers: 
+  receivers:
     otlp:
       protocols:
         http:
@@ -13,7 +13,7 @@ ingester:
 
 compactor:
   compaction:
-    block_retention: 1h                # overall Tempo trace retention. set for demo purposes
+    block_retention: 336h # retain data for 14 days
 
 # metrics_generator:
 #   registry:

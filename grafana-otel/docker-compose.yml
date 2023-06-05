@@ -1,6 +1,6 @@
 version: '3.8'
 
-networks: 
+networks:
   log-network:
 
 services:
@@ -10,12 +10,10 @@ services:
     command:
       - --config=/etc/otelcol/otel-config.yaml
     ports:
+      #- 4317:4317     # OTLP over gRPC receiver / not used yet
       - 4318:4318     # OTLP over HTTP receiver
-      - 9464
-      - 9091:9091     # Prometheus exporter
-      - 8888:8888     # metrics endpoint
-      - 1888:1888
-      - 55679
+      #- 9091:9091     # Prometheus exporter / not used yet
+      #- 8888:8888     # metrics endpoint / this can be hidden since grafana will connect to it via the network
     volumes:
       - ./otel-data:/etc/otelcol/
     networks:
@@ -27,7 +25,7 @@ services:
     volumes:
       - ./grafana-data:/var/lib/grafana
     ports:
-      - "3000:3000"
+      - 3000:3000
     networks:
       - log-network
 
@@ -39,14 +37,14 @@ services:
       - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml
     networks:
       - log-network
-  
+
   loki:
      image: grafana/loki:latest
      ports:
        - 3100:3100
      volumes:
        - ./config/loki.yaml:/etc/loki/config.yaml
-     command: 
+     command:
        - -config.file=/etc/loki/config.yaml
      networks:
        - log-network
@@ -54,9 +52,7 @@ services:
   tempo:
     image: grafana/tempo:latest
     ports:
-      - 14268:14268
       #- 3200:3200 # this endpoint can be hidden since grafana will connect to it via the network
-      - 9411:9411
     volumes:
       - ./tempo-data:/etc/tempo/
       - ./config/tempo.yaml:/etc/tempo/tempo.yaml
