@@ -56,8 +56,8 @@ services:
     volumes:
       - ./tempo-data:/etc/tempo/
       - ./config/tempo.yaml:/etc/tempo/tempo.yaml
-    # environment:
-    #   - GOOGLE_APPLICATION_CREDENTIALS=/etc/tempo/storage-testing-inloob-4273d5879417.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${TEMPO_GCP_SERVCIE_ACC}
     command:
       - -config.file=/etc/tempo/tempo.yaml
     networks:
