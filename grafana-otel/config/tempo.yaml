@@ -33,6 +33,9 @@ storage:
       path: /tmp/tempo/wal             # where to store the the wal locally
     local:
       path: /tmp/tempo/blocks
+    # backend: "gcs"
+    # gcs:
+    #   bucket_name: "stg-inloob-grafana"
 
 # overrides:
 #   metrics_generator_processors: [service-graphs, span-metrics] # enables metrics generator
