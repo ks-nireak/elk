@@ -17,8 +17,13 @@
 #     env:
 #       COMPOSE_PROJECT_NAME: docker-elk
 
+<<<<<<< HEAD
 #     steps:
 #       - uses: actions/checkout@v3
+=======
+    steps:
+      - uses: actions/checkout@v4
+>>>>>>> 38a4684c497fc5ea930687d1a03b33b4f53945b0
 
 #       #####################################################
 #       #                                                   #
